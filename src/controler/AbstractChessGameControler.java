@@ -1,5 +1,7 @@
 package controler;
 
+import java.util.List;
+
 import model.Coord;
 import model.Couleur;
 import model.observable.ChessGame;
@@ -91,6 +93,10 @@ public abstract class AbstractChessGameControler implements ChessGameControlers 
 
 	protected Couleur getPieceColor(Coord initCoord){		
 		return this.chessGame.getPieceColor(initCoord.x, initCoord.y);		
-	}	
+	}
+	
+	public List<Coord> getPossiblePositions(Coord coord) {
+		return this.chessGame.getPositionsPossible(coord);
+	}
 	
 }

@@ -21,6 +21,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import controler.controlerLocal.ChessGameControler;
+import model.Coord;
 import model.PieceIHM;
 import tools.ChessImageProvider;
 import tools.JPanelCustom;
@@ -41,7 +42,6 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
     int xAdjustment;
     int yAdjustment;
     ChessGameControler controler;
-    Point saveLocation;
  
     public ChessGameGUI(String frameName, ChessGameControler chessGameControler, Dimension dim){
     	Dimension boardSize = dim;
@@ -70,37 +70,53 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
                 
                 int row = y%2;
                 if (row == 0)
-                    square.setBackground( ((y*8)+x) % 2 == 0 ? Color.black : Color.white );
-                else
                     square.setBackground( ((y*8)+x) % 2 == 0 ? Color.white : Color.black );
+                else
+                    square.setBackground( ((y*8)+x) % 2 == 0 ? Color.black : Color.white );
         	}
         }
     }
+    
+    private void coloredPossiblePositions(List<Coord> list) {
+    	for(Coord coord : list) {
+    		this.chessBoard.getComponent(8*coord.y + coord.x).setBackground(Color.blue);
+    	}
+    }
  
     public void mousePressed(MouseEvent e){
-        chessPiece = null;
-        Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
-        this.saveLocation = new Point (e.getX(), e.getY());
         
+    	chessPiece = null;
+        Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
+                
         if (c instanceof JPanelCustom) 
         	return;
         this.pieceClicked = (JPanelCustom)c.getParent();
         
-        Point parentLocation = c.getParent().getLocation();
-        xAdjustment = parentLocation.x - e.getX();
-        yAdjustment = parentLocation.y - e.getY();
-        chessPiece = (JLabel)c;
-        chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
-        chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
-        layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
+        if(this.controler.isPlayerOK(this.pieceClicked.getCoord())) {
+        
+	        //coloredPossiblePositions(this.controler.getPossiblePositions(pieceClicked.getCoord()));
+	
+	        
+	        Point parentLocation = c.getParent().getLocation();
+	        xAdjustment = parentLocation.x - e.getX();
+	        yAdjustment = parentLocation.y - e.getY();
+	        chessPiece = (JLabel)c;
+	        chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+	        chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
+	        layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
+        }
     }
    
     //Move the chess piece around
     
     public void mouseDragged(MouseEvent me) {
-        if (chessPiece == null) return;
-         chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
-     }
+        if(this.controler.isPlayerOK(this.pieceClicked.getCoord())) {
+
+        	if (chessPiece == null) return;
+        	chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+     
+        }
+    }
      
   //Drop the chess piece back onto the chess board
  

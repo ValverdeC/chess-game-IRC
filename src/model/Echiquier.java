@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -143,6 +144,18 @@ public class Echiquier implements BoardGames {
 		
 		return thereIsOne;
 	}
+	
+	public List<Coord> getPossiblePositions(Coord coord) {
+		List<Coord> list = new ArrayList<>();
+		for(int y = 0; y < 8; y++) {
+			for(int x = 0; x < 8; x++) {
+				if(jeuCourant.isMoveOk(coord.x, coord.y, x, y, isCatchOk(x, y), false)) {
+					list.add(new Coord(x, y));
+				}
+			}
+		}
+		return list;
+	}
 
 	@Override
 	public boolean isEnd() {
@@ -161,14 +174,12 @@ public class Echiquier implements BoardGames {
 
 	@Override
 	public Couleur getColorCurrentPlayer() {
-		// TODO Auto-generated method stub
-		return null;
+		return jeuCourant.getCouleur();
 	}
 
 	@Override
 	public Couleur getPieceColor(int x, int y) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.jeuCourant.getPieceCouleur(x, y);
 	}
 	
 	public void switchJoueur() {

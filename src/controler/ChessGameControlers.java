@@ -1,5 +1,7 @@
 package controler;
 
+import java.util.List;
+
 import model.Coord;
 
 public interface ChessGameControlers {
@@ -28,5 +30,11 @@ public interface ChessGameControlers {
 	 * pour empÃªcher tout dÃ©placement sur le damier
 	 */
 	public boolean isPlayerOK(Coord initCoord);
+	
+	/**
+	 * 
+	 * @return liste des positions possible pour le pion donné en paramètre
+	 */
+	public List<Coord> getPossiblePositions(Coord coord);
 
 }
