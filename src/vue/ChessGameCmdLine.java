@@ -32,6 +32,7 @@ public class ChessGameCmdLine implements Observer{
 	 * Lorsque l'échiquier est MAJ, cette méthode est invoquée
 	 * elle récupère la liste de PieceIHM fabriquée par l'échiquier
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		

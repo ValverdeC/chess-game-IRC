@@ -9,12 +9,12 @@ public class Jeu implements Game {
 	
 	private List<Pieces> pieces;
 	private Couleur couleur;
-	private boolean castling;
+	// private boolean castling;
 
 	public Jeu(Couleur couleur) {
 		pieces = ChessPiecesFactory.newPieces(couleur);
 		this.couleur = couleur;
-		this.castling = false;
+		// this.castling = false;
 	}
 
 	@Override
@@ -107,9 +107,9 @@ public class Jeu implements Game {
 		return nom;
 	}
 	
-	public void setCastling() {
+	/*public void setCastling() {
 		this.castling = true;
-	}
+	}*/
 
 	public static void main(String[] args) {
 		Jeu monJeu = new Jeu(Couleur.BLANC);

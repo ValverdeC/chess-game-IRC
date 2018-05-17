@@ -82,6 +82,20 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
     		this.chessBoard.getComponent(8*coord.y + coord.x).setBackground(Color.blue);
     	}
     }
+    
+    private void reinitSquares() {
+    	for (int y = 0; y < 8; y++) {
+        	for(int x = 0; x < 8; x++) {
+        		
+                
+                int row = y%2;
+                if (row == 0)
+                	this.chessBoard.getComponent((y*8)+x).setBackground(((y*8)+x) % 2 == 0 ? Color.white : Color.black );
+                else
+                	this.chessBoard.getComponent((y*8)+x).setBackground(((y*8)+x) % 2 == 0 ? Color.black : Color.white );
+        	}
+        }
+    }
  
     public void mousePressed(MouseEvent e){
         
@@ -94,7 +108,7 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
         
         if(this.controler.isPlayerOK(this.pieceClicked.getCoord())) {
         
-	        //coloredPossiblePositions(this.controler.getPossiblePositions(pieceClicked.getCoord()));
+	        this.coloredPossiblePositions(this.controler.getPossiblePositions(pieceClicked.getCoord()));
 	
 	        
 	        Point parentLocation = c.getParent().getLocation();
@@ -125,6 +139,8 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
  
         chessPiece.setVisible(false);
         Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
+        
+        this.reinitSquares();
         
         if (c instanceof JLabel){
         	if(this.controler.move(this.pieceClicked.getCoord(), ((JPanelCustom) c.getParent()).getCoord())) {
@@ -162,6 +178,7 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
 //        frame.setVisible(true);
      }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable o, Object arg) {
 		
