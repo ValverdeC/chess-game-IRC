@@ -2,18 +2,22 @@ package model;
 
 import java.lang.reflect.InvocationTargetException;
 
+import tools.AbstractStrategyFactory;
+
 public class Pieces implements IPieces {
 	private Coord coordonnees;
 	private Couleur couleur;
 	private String name;
 	private SIsMoveOk initialStrategie;
-	private SIsMoveOk strategieDeplacement;
 	
-	public Pieces(Coord coordonnees, Couleur couleur, String name) {
+	private AbstractStrategyFactory factory;
+	
+	public Pieces(Coord coordonnees, Couleur couleur, String name, AbstractStrategyFactory factory) {
 		super();
 		this.coordonnees = coordonnees;
 		this.couleur = couleur;
 		this.name = name;
+		this.factory = factory;
 		try {
 			try {
 				this.initialStrategie = (SIsMoveOk) Class.forName("model.S" + this.name).getMethod("getInstance").invoke(null);
@@ -23,7 +27,6 @@ public class Pieces implements IPieces {
 		} catch (IllegalAccessException | ClassNotFoundException e) {
 			throw new RuntimeException(e.getMessage());
 		}
-		this.strategieDeplacement = this.getStrategieDeplacement(coordonnees);
 	}
 
 	@Override
@@ -48,8 +51,7 @@ public class Pieces implements IPieces {
 
 	@Override	
 	public boolean isMoveOk(int xFinal, int yFinal, boolean isCatchOk, boolean isCastlingPossible) {
-		this.strategieDeplacement = this.getStrategieDeplacement(this.coordonnees);
-		return this.strategieDeplacement.isMoveOk(xFinal, yFinal, isCatchOk, isCastlingPossible, this.coordonnees, this.couleur);
+		return this.factory.getStrategieDeplacement(this.coordonnees, this.initialStrategie).isMoveOk(xFinal, yFinal, isCatchOk, isCastlingPossible, this.coordonnees, this.couleur);
 	}
 
 	@Override
@@ -69,25 +71,6 @@ public class Pieces implements IPieces {
 	@Override
 	public String toString() {
 		return "AbstractPiece [coordonnees=" + coordonnees + ", name=" + name + "]";
-	}
-	
-	private SIsMoveOk getStrategieDeplacement(Coord coord) {
-		switch(coord.getX()) {
-			case 0:
-			case 7:
-				return STour.getInstance();
-				
-			case 1:
-			case 6:
-				return SCavalier.getInstance();
-				
-			case 2:
-			case 5:
-				return SFou.getInstance();
-				
-			default:
-				return this.initialStrategie;
-		}
 	}
 	
 }

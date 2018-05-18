@@ -1,5 +1,6 @@
 package tools;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ChessPiecesFactory {
 	 * @param pieceCouleur
 	 * @return liste de pi�ces de jeu d'�chec
 	 */
-	public static List<Pieces> newPieces(Couleur pieceCouleur){
+	public static List<Pieces> newPieces(Couleur pieceCouleur, AbstractStrategyFactory factory){
 
 		List<Pieces> pieces = null;
 		pieces = new LinkedList<Pieces>();
@@ -41,8 +42,13 @@ public class ChessPiecesFactory {
 					for (int j = 0; j < (ChessPiecePos.values()[i].coords).length; j++) {
 						String className = ChessPiecePos.values()[i].nom;	// attention au chemin
 						Coord pieceCoord = ChessPiecePos.values()[i].coords[j];
-						pieces.add((Pieces) Introspection.newInstance ("model.Pieces",
-								new Object[] {pieceCoord, pieceCouleur, className}));
+						try {
+							pieces.add((Pieces)Pieces.class.getConstructors()[0].newInstance(pieceCoord, pieceCouleur, className, ((AbstractStrategyFactory)factory)));
+						} catch (InstantiationException | IllegalAccessException
+								| IllegalArgumentException | InvocationTargetException
+								| SecurityException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -55,6 +61,6 @@ public class ChessPiecesFactory {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println(ChessPiecesFactory.newPieces(Couleur.BLANC));
+		//System.out.println(ChessPiecesFactory.newPieces(Couleur.BLANC));
 	}
 }

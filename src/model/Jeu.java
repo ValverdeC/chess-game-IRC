@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import tools.ChessPiecesFactory;
+import tools.StrategyFactoryClassic;
+import tools.StrategyFactoryTempete;
 
 public class Jeu implements Game {
 	
@@ -12,7 +14,7 @@ public class Jeu implements Game {
 	// private boolean castling;
 
 	public Jeu(Couleur couleur) {
-		pieces = ChessPiecesFactory.newPieces(couleur);
+		pieces = ChessPiecesFactory.newPieces(couleur, new StrategyFactoryTempete());
 		this.couleur = couleur;
 		// this.castling = false;
 	}
