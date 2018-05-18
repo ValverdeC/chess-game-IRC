@@ -54,6 +54,10 @@ public abstract class AbstractChessGameControler implements ChessGameControlers 
 		}
 		return ret;
 	}
+	
+	final public boolean undoMove() {
+		return this.chessGame.undoMove();
+	}
 
 	/* (non-Javadoc)
 	 * @see controler.AbstractChessGameControler#isPlayerOK(model.Coord)

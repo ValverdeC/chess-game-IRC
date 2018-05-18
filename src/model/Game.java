@@ -39,6 +39,16 @@ public interface Game  {
 	 * @return true si déplacement pièce effectué
 	 */
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) ;
+	
+	
+	/**
+	 * @param xInit
+	 * @param yInit
+	 * @param xFinal
+	 * @param yFinal
+	 * @return true si déplacement pièce effectué
+	 */
+	public boolean undoMove() ;
 
 
 	/**

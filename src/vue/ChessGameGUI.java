@@ -7,6 +7,9 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -19,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import controler.controlerLocal.ChessGameControler;
 import model.Coord;
@@ -26,7 +30,7 @@ import model.PieceIHM;
 import tools.ChessImageProvider;
 import tools.JPanelCustom;
 
-public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
+public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer, KeyListener {
 
 	/**
 	 * 
@@ -53,7 +57,7 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
         layeredPane.setPreferredSize(boardSize);
         layeredPane.addMouseListener(this);
         layeredPane.addMouseMotionListener(this);
-
+        this.addKeyListener(this);
         //Add a chess board to the Layered Pane 
  
         chessBoard = new JPanel();
@@ -194,5 +198,22 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
         	this.panel = (JPanel)chessBoard.getComponent(8*pieceIHM.getY()+pieceIHM.getX());
         	this.panel.add(this.piece);
         }
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+				
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if ((e.getKeyCode() == KeyEvent.VK_Z) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            this.controler.undoMove();
+        }
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
 	}
 }

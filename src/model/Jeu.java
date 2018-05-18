@@ -4,13 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import tools.ChessPiecesFactory;
-import tools.StrategyFactoryClassic;
 import tools.StrategyFactoryTempete;
 
 public class Jeu implements Game {
 	
 	private List<Pieces> pieces;
 	private Couleur couleur;
+	private Pieces lastMovedPiece;
 	// private boolean castling;
 
 	public Jeu(Couleur couleur) {
@@ -44,6 +44,7 @@ public class Jeu implements Game {
 		Pieces piece = findPiece(xInit, yInit);
 		
 		if(piece != null) {
+			this.lastMovedPiece = piece;
 			return piece.move(xFinal, yFinal);
 		} else {
 			return false;
@@ -119,5 +120,10 @@ public class Jeu implements Game {
 		System.out.println(monJeu.move(0, 6, 0, 4));
 		System.out.println(monJeu.isPieceHere(0, 4));
 		System.out.println(monJeu.isMoveOk(0, 4, 0, 5, true, true));
+	}
+
+	@Override
+	public boolean undoMove() {
+		return this.lastMovedPiece.undoMove();
 	}
 }

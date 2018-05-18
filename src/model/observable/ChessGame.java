@@ -112,4 +112,11 @@ public class ChessGame extends Observable implements BoardGames{
 	public List<Coord> getPositionsPossible(Coord coord) {
 		return this.echiquier.getPossiblePositions(coord);
 	}
+
+
+	@Override
+	public boolean undoMove() {
+		this.echiquier.switchJoueur();
+		return this.echiquier.undoMove();
+	}
 }

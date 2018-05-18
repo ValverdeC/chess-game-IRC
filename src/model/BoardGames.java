@@ -20,6 +20,17 @@ public interface BoardGames {
 	 * @return OK si deplacement OK	 
 	 */
 	public boolean move (int xInit, int yInit, int xFinal, int yFinal); 
+	
+	/**
+	 * Permet de replacer une piece connaissant ses coordonnees finales 
+	 * vers ses coordonnees initiales 	 *  
+	 * @param xInit
+	 * @param yInit
+	 * @param xFinal
+	 * @param yFinal
+	 * @return OK si deplacement OK	 
+	 */
+	public boolean undoMove (); 
 
 	/**
 	 * @return true si c'est la fin du jeu

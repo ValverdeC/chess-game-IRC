@@ -201,4 +201,9 @@ public class Echiquier implements BoardGames {
 		Echiquier monEchiquier = new Echiquier();
 		System.out.println(monEchiquier);
 	}
+
+	@Override
+	public boolean undoMove() {
+		return this.jeuCourant.undoMove();
+	}
 }

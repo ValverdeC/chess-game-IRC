@@ -1,6 +1,8 @@
 package launcher.localLauncher;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Observer;
 
 import javax.swing.JFrame;
@@ -42,5 +44,6 @@ public class LauncherGUI {
 		frame.setLocation(600, 10);
 		frame.pack();
 		frame.setVisible(true);
+		
 	}
 }

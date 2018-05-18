@@ -9,6 +9,7 @@ public class Pieces implements IPieces {
 	private Couleur couleur;
 	private String name;
 	private SIsMoveOk initialStrategie;
+	private Coord previousCoord = new Coord(-1, -1);
 	
 	private AbstractStrategyFactory factory;
 	
@@ -56,6 +57,8 @@ public class Pieces implements IPieces {
 
 	@Override
 	public boolean move(int xFinal, int yFinal) {
+		this.previousCoord.setX(this.coordonnees.getX());
+		this.previousCoord.setY(this.coordonnees.getY());
 		this.coordonnees.x = xFinal;
 		this.coordonnees.y = yFinal;
 		return true;
@@ -71,6 +74,11 @@ public class Pieces implements IPieces {
 	@Override
 	public String toString() {
 		return "AbstractPiece [coordonnees=" + coordonnees + ", name=" + name + "]";
+	}
+
+	@Override
+	public boolean undoMove() {
+		return this.move(this.previousCoord.getX(), this.previousCoord.getY());
 	}
 	
 }

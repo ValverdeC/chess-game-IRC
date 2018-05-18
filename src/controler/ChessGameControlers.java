@@ -13,6 +13,11 @@ public interface ChessGameControlers {
 	 * @return true si le déplacement s'est bien passé
 	 */
 	public boolean move(Coord initCoord, Coord finalCoord);
+	
+	/**
+	 * @return true si le déplacement s'est bien passé
+	 */
+	public boolean undoMove();
 
 	/**
 	 * @return message relatif aux déplacement, capture, etc.
