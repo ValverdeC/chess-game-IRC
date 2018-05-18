@@ -7,7 +7,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -22,13 +21,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 import controler.controlerLocal.ChessGameControler;
 import model.Coord;
 import model.PieceIHM;
 import tools.ChessImageProvider;
+import tools.CommandInvocator;
 import tools.JPanelCustom;
+import tools.MoveCommand;
 
 public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer, KeyListener {
 
@@ -46,10 +46,12 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
     int xAdjustment;
     int yAdjustment;
     ChessGameControler controler;
+    CommandInvocator cmdInvocator;
  
     public ChessGameGUI(String frameName, ChessGameControler chessGameControler, Dimension dim){
     	Dimension boardSize = dim;
         this.controler = chessGameControler;
+        this.cmdInvocator = new CommandInvocator();
         //  Use a Layered Pane for this this application
  
         layeredPane = new JLayeredPane();
@@ -144,17 +146,20 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
         chessPiece.setVisible(false);
         Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
         
+        
         this.reinitSquares();
         
-        if (c instanceof JLabel){
-        	if(this.controler.move(this.pieceClicked.getCoord(), ((JPanelCustom) c.getParent()).getCoord())) {
+        if (c instanceof JLabel) {
+        	MoveCommand command = new MoveCommand(this.controler, this.pieceClicked.getCoord(), ((JPanelCustom) c.getParent()).getCoord());
+        	if(this.cmdInvocator.perform(command)) {
 	            Container parent = (Container)c;
 	            parent.add( chessPiece );
 	            chessPiece.setVisible(true);
         	}
         }
         else {
-        	if(this.controler.move(this.pieceClicked.getCoord(), ((JPanelCustom) c).getCoord())) {
+        	MoveCommand command = new MoveCommand(this.controler, this.pieceClicked.getCoord(), ((JPanelCustom) c).getCoord());
+        	if(this.cmdInvocator.perform(command)) {
 	            Container parent = (Container)c;
 	            parent.add( chessPiece );
 	            chessPiece.setVisible(true);
@@ -198,6 +203,9 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
         	this.panel = (JPanel)chessBoard.getComponent(8*pieceIHM.getY()+pieceIHM.getX());
         	this.panel.add(this.piece);
         }
+		
+		revalidate();
+		repaint();
 	}
 
 	@Override
@@ -208,7 +216,11 @@ public class ChessGameGUI extends JFrame implements MouseListener, MouseMotionLi
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if ((e.getKeyCode() == KeyEvent.VK_Z) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            this.controler.undoMove();
+			MoveCommand command = new MoveCommand(this.controler);
+            this.cmdInvocator.unperform(command);
+        }
+		if ((e.getKeyCode() == KeyEvent.VK_Y) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            this.cmdInvocator.reperform();
         }
 	}
 

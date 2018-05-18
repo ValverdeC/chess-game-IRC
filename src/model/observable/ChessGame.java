@@ -116,7 +116,10 @@ public class ChessGame extends Observable implements BoardGames{
 
 	@Override
 	public boolean undoMove() {
+		boolean ret = false;
 		this.echiquier.switchJoueur();
-		return this.echiquier.undoMove();
+		ret = this.echiquier.undoMove();
+		this.notifyObservers(echiquier.getPiecesIHM()); 
+		return ret;
 	}
 }

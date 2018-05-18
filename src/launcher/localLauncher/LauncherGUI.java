@@ -1,8 +1,6 @@
 package launcher.localLauncher;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Observer;
 
 import javax.swing.JFrame;
@@ -29,7 +27,7 @@ public class LauncherGUI {
 
 		ChessGame chessGame;	
 		ChessGameControler chessGameControler;
-		JFrame frame;	
+		JFrame frame;
 		Dimension dim;
 	
 		dim = new Dimension(700, 700);

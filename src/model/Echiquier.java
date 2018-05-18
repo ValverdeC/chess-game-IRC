@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import tools.AbstractStrategyFactory;
+import tools.StrategyFactoryTempete;
+
 public class Echiquier implements BoardGames {
 	
 	private Jeu jeuBlanc;
 	private Jeu jeuNoir;
 	private Jeu jeuCourant, jeuOppose;
-	private String message;	
+	private String message;
+	private AbstractStrategyFactory factory;
 	
 	public Echiquier() {
 		super();
-		this.jeuBlanc = new Jeu(Couleur.BLANC);
-		this.jeuNoir = new Jeu(Couleur.NOIR);
+		this.factory =  new StrategyFactoryTempete();
+		this.jeuBlanc = new Jeu(Couleur.BLANC, this.factory);
+		this.jeuNoir = new Jeu(Couleur.NOIR, this.factory);
 		this.message = "Le jeu blanc commence la partie";
 		this.jeuCourant = this.jeuBlanc;
 		this.jeuOppose = this.jeuNoir;
@@ -31,7 +36,7 @@ public class Echiquier implements BoardGames {
 	sinon déplacer la piéce -->true*/
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal) {
 		boolean moveOk = false;
-		boolean isCatch = isCatchOk(xFinal, yFinal);
+		boolean isCatch = isCatchOk(xInit, yInit, xFinal, yFinal);
 		String mess = "[Joueur " + jeuCourant.getCouleur() + "] : Mouvement impossible";
 
 		if(jeuCourant.isPieceHere(xInit, yInit)) {
@@ -49,10 +54,14 @@ public class Echiquier implements BoardGames {
 		return moveOk;
 	}
 	
-	private boolean isCatchOk(int xFinal, int yFinal) {
+	private boolean isCatchOk(int xInit, int yInit, int xFinal, int yFinal) {
 		boolean isCatch = false;
 		if(jeuOppose.isPieceHere(xFinal, yFinal)) {
-			isCatch = true;
+			SIsMoveOk strat = this.factory.getStrategieDeplacement(new Coord(xInit, yInit), null);
+			
+			if (!(strat instanceof SPion) || xInit != xFinal) {
+				isCatch = true;				
+			}
 		}
 		return isCatch;
 	}
@@ -66,7 +75,7 @@ public class Echiquier implements BoardGames {
 
 	@Override
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
-		if(isCatchOk(xFinal, yFinal)) {
+		if(isCatchOk(xInit, yInit, xFinal, yFinal)) {
 			jeuOppose.capture(xFinal, yFinal);
 		}
 		return jeuCourant.move(xInit, yInit, xFinal, yFinal);
@@ -107,10 +116,10 @@ public class Echiquier implements BoardGames {
 						}
 					}
 				}
-				//Test particulier pour pion
+				/*/Test particulier pour pion
 				if((jeuCourant.getPieceName(xInit, yInit).equals("Pion")) && (jeuOppose.isPieceHere(xFinal, yFinal))) {
 					thereIsOne = true;
-				}
+				}*/
 			} else {
 				//Déplacement diagonale restant uniquement
 				if(xFinal - xInit > 0 && yFinal - yInit < 0) {
@@ -149,7 +158,7 @@ public class Echiquier implements BoardGames {
 		List<Coord> list = new ArrayList<>();
 		for(int y = 0; y < 8; y++) {
 			for(int x = 0; x < 8; x++) {
-				if(jeuCourant.isMoveOk(coord.x, coord.y, x, y, isCatchOk(x, y), false)) {
+				if(jeuCourant.isMoveOk(coord.x, coord.y, x, y, isCatchOk(coord.x, coord.y, x, y), false)) {
 					list.add(new Coord(x, y));
 				}
 			}

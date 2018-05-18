@@ -3,6 +3,7 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
+import tools.AbstractStrategyFactory;
 import tools.ChessPiecesFactory;
 import tools.StrategyFactoryTempete;
 
@@ -13,8 +14,8 @@ public class Jeu implements Game {
 	private Pieces lastMovedPiece;
 	// private boolean castling;
 
-	public Jeu(Couleur couleur) {
-		pieces = ChessPiecesFactory.newPieces(couleur, new StrategyFactoryTempete());
+	public Jeu(Couleur couleur, AbstractStrategyFactory factory) {
+		pieces = ChessPiecesFactory.newPieces(couleur, factory);
 		this.couleur = couleur;
 		// this.castling = false;
 	}
@@ -115,7 +116,7 @@ public class Jeu implements Game {
 	}*/
 
 	public static void main(String[] args) {
-		Jeu monJeu = new Jeu(Couleur.BLANC);
+		Jeu monJeu = new Jeu(Couleur.BLANC, new StrategyFactoryTempete());
 		System.out.println(monJeu);
 		System.out.println(monJeu.move(0, 6, 0, 4));
 		System.out.println(monJeu.isPieceHere(0, 4));
